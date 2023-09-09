@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model products {
+  code BigInt @id
+  name String @db.VarChar(100)
+  cost_price Decimal @db.Decimal(9,2)
+  sales_price Decimal @db.Decimal(9,2)
+  packs packs[]
+}
+
+model packs {
+  id BigInt @id @default(autoincrement())
+  pack_id BigInt
+  product_id BigInt
+  products products @relation(fields: [product_id], references: [code], onDelete: Cascade)
+  qty BigInt
+
+  @@index([product_id])
+}
